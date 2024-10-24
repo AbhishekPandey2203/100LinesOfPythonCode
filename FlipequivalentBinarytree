@@ -1,0 +1,46 @@
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def flipEquiv(self, root1, root2):
+        """
+        :type root1: TreeNode
+        :type root2: TreeNode
+        :rtype: bool
+        """
+        def hash_cnt(root):
+            parent_node_stack = [root]
+            hash_t = {}
+            while len(parent_node_stack) > 0:
+                child_node_stack = []
+                for node in parent_node_stack:
+                    hash_t[node.val] = []
+                    if node.left:
+                        hash_t[node.val].append(node.left.val)
+                        child_node_stack.append(node.left)
+                    if node.right:
+                        hash_t[node.val].append(node.right.val)
+                        child_node_stack.append(node.right)
+                parent_node_stack = child_node_stack   
+            return hash_t
+        
+        if root1:
+            hash_t1 = hash_cnt(root1)
+        else:
+            hash_t1 = {}
+        if root2:
+            hash_t2 = hash_cnt(root2)
+        else:
+            hash_t2 = {}
+        if hash_t1.keys() == hash_t2.keys():
+            for k in hash_t1.keys():
+                if set(hash_t1[k]) != set(hash_t2[k]):
+                    return False
+            return True
+        else:
+            return False
